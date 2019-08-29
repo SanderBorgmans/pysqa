@@ -7,7 +7,6 @@ from pysqa.basic import BasisQueueAdapter
 
 class ModularQueueAdapter(BasisQueueAdapter):
     def __init__(self, config, directory="~/.queues"):
-        config["queue_type"] = "SLURM"
         super(ModularQueueAdapter, self).__init__(config=config, directory=directory)
         self._queue_to_cluster_dict = {
             k: v["cluster"] for k, v in self._config["queues"].items()
@@ -51,13 +50,15 @@ class ModularQueueAdapter(BasisQueueAdapter):
         )
         cluster_module = self._queue_to_cluster_dict[queue]
         commands = (
-            ["module --quiet swap cluster/{};".format(cluster_module)]
+            self._switch_cluster_command(cluster_module=cluster_module)
             + self._commands.submit_job_command
             + [queue_script_path]
         )
-        commands = " ".join(commands)
         out = self._execute_command(
-            commands=commands, working_directory=working_directory, split_output=False
+            commands=commands, 
+            working_directory=working_directory, 
+            split_output=False, 
+            shell=True,
         )
         if out is not None:
             cluster_queue_id = self._commands.get_job_id_from_output(out)
@@ -85,8 +86,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
             + self._commands.enable_reservation_command
             + [str(cluster_queue_id)]
         )
-        #commands = " ".join(commands)
-        out = self._execute_command(commands=commands, split_output=True)
+        out = self._execute_command(commands=commands, split_output=True, shell=True)
         if out is not None:
             return out[0]
         else:
@@ -110,8 +110,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
             + self._commands.delete_job_command
             + [str(cluster_queue_id)]
         )
-        commands = " ".join(commands)
-        out = self._execute_command(commands=commands, split_output=True)
+        out = self._execute_command(commands=commands, split_output=True, shell=True)
         if out is not None:
             return out[0]
         else:
@@ -128,19 +127,20 @@ class ModularQueueAdapter(BasisQueueAdapter):
         """
         df_lst = []
         for cluster_module in self._config["cluster"]:
-            cluster_commands = self._switch_cluster_command(cluster_module=cluster_module)
-            commands = (
-                cluster_commands
-                + self._commands.get_queue_status_command
+            cluster_commands = self._switch_cluster_command(
+                cluster_module=cluster_module
             )
-            commands = " ".join(commands)
             out = self._execute_command(
-                commands=commands,
+                commands=cluster_commands + self._commands.get_queue_status_command,
                 split_output=False,
+                shell=True,
             )
             df = self._commands.convert_queue_status(queue_status_output=out)
-            if not df is None: df_lst.append(df) # prevent empty clusters from throwing errors
-        df = pandas.concat(df_lst, axis=1, sort=False).reset_index(drop=True)
+            if not df.empty:
+                df_lst.append(df)
+        if len(df_lst)>0:
+            df = pandas.concat(df_lst,ignore_index=True)
+            print(df)
         if user is None:
             return df
         else:
@@ -154,4 +154,4 @@ class ModularQueueAdapter(BasisQueueAdapter):
 
     @staticmethod
     def _switch_cluster_command(cluster_module):
-        return ["module --quiet swap cluster/{};".format(cluster_module)]
+        return "module --quiet swap cluster/{};".format(cluster_module)

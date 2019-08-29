@@ -366,7 +366,7 @@ class BasisQueueAdapter(object):
         return getpass.getuser()
 
     @staticmethod
-    def _execute_command(commands, working_directory=None, split_output=True):
+    def _execute_command(commands, working_directory=None, split_output=True, shell=False):
         """
 
         Args:
@@ -377,6 +377,8 @@ class BasisQueueAdapter(object):
         Returns:
             str:
         """
+        if shell and isinstance(commands, list):
+            commands = " ".join(commands)
         try:
             out = subprocess.check_output(
                 commands,
@@ -391,6 +393,7 @@ class BasisQueueAdapter(object):
             return out.split("\n")
         else:
             return out
+
 
     @staticmethod
     def _fill_queue_dict(queue_lst_dict):
