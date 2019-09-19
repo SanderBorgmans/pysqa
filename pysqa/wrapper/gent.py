@@ -19,10 +19,12 @@ __date__ = "Feb 9, 2019"
 
 
 class GentCommands(SlurmCommands):
-    
+    def enable_reservation_command(self, process_id,reservation_id):
+        return ["scontrol", "update", "job", str(process_id), "reservation={}".format(reservation_id)]
+
     @property
     def get_queue_status_command(self):
-        return "squeue --format '%A|%u|%t|%j' --noheader"
+        return ["squeue", "--format", "'%A|%u|%t|%j'", "--noheader"]
     
     @staticmethod
     def get_job_id_from_output(queue_submit_output):

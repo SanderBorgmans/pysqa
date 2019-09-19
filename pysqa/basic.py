@@ -142,17 +142,19 @@ class BasisQueueAdapter(object):
         else:
             return None
 
-    def enable_reservation(self, process_id):
+    def enable_reservation(self, process_id, reservation_id):
         """
 
         Args:
             process_id (int):
+            reservation_id (int/str):
 
         Returns:
             str:
         """
+        self._commands.enable_reservation_command(str(process_id),str(reservation_id))
         out = self._execute_command(
-            commands=self._commands.enable_reservation_command + [str(process_id)],
+            commands=self._commands.enable_reservation_command,
             split_output=True,
         )
         if out is not None:
@@ -393,7 +395,6 @@ class BasisQueueAdapter(object):
             return out.split("\n")
         else:
             return out
-
 
     @staticmethod
     def _fill_queue_dict(queue_lst_dict):
