@@ -116,7 +116,7 @@ class QueueAdapter(object):
             command=command,
         )
 
-    def enable_reservation(self, process_id):
+    def enable_reservation(self, process_id, reservation_id):
         """
 
         Args:
@@ -125,7 +125,7 @@ class QueueAdapter(object):
         Returns:
             str:
         """
-        return self._adapter.enable_reservation(process_id=process_id)
+        return self._adapter.enable_reservation(process_id=process_id,reservation_id=reservation_id)
 
     def delete_job(self, process_id):
         """
