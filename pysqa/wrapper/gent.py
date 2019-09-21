@@ -25,7 +25,7 @@ class GentCommands(SlurmCommands):
     @property
     def get_queue_status_command(self):
         return ["squeue", "--format", "'%A|%u|%t|%j'", "--noheader"]
-    
+
     @staticmethod
     def get_job_id_from_output(queue_submit_output):
           return int(queue_submit_output.splitlines()[-1].rstrip().lstrip().split(';')[0])

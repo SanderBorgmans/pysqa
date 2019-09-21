@@ -55,9 +55,9 @@ class ModularQueueAdapter(BasisQueueAdapter):
             + [queue_script_path]
         )
         out = self._execute_command(
-            commands=" ".join(commands), 
-            working_directory=working_directory, 
-            split_output=False, 
+            commands=" ".join(commands),
+            working_directory=working_directory,
+            split_output=False,
             shell=True,
         )
         if out is not None:
@@ -130,7 +130,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
                 cluster_module=cluster_module
             )
             commands = (
-                cluster_commands 
+                cluster_commands
                 + self._commands.get_queue_status_command
             )
             out = self._execute_command(
