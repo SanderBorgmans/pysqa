@@ -3,7 +3,7 @@ name: Python package
 on: [push]
 
 jobs:
-  run: 
+  run:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       max-parallel: 4

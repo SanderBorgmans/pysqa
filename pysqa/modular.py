@@ -55,7 +55,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
             + [queue_script_path]
         )
         out = self._execute_command(
-            commands=" ".join(commands),
+            commands=commands,
             working_directory=working_directory,
             split_output=False,
             shell=True,
@@ -68,7 +68,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
         else:
             return None
 
-    def enable_reservation(self, process_id, reservation_id):
+    def enable_reservation(self, process_id):
         """
 
         Args:
@@ -83,9 +83,10 @@ class ModularQueueAdapter(BasisQueueAdapter):
         cluster_commands = self._switch_cluster_command(cluster_module=cluster_module)
         commands = (
             cluster_commands
-            + self._commands.enable_reservation_command(str(cluster_queue_id),str(reservation_id))
+            + self._commands.enable_reservation_command
+            + [str(cluster_queue_id)]
         )
-        out = self._execute_command(commands=" ".join(commands), split_output=True, shell=True)
+        out = self._execute_command(commands=commands, split_output=True, shell=True)
         if out is not None:
             return out[0]
         else:
@@ -109,7 +110,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
             + self._commands.delete_job_command
             + [str(cluster_queue_id)]
         )
-        out = self._execute_command(commands=" ".join(commands), split_output=True, shell=True)
+        out = self._execute_command(commands=commands, split_output=True, shell=True)
         if out is not None:
             return out[0]
         else:
@@ -129,20 +130,14 @@ class ModularQueueAdapter(BasisQueueAdapter):
             cluster_commands = self._switch_cluster_command(
                 cluster_module=cluster_module
             )
-            commands = (
-                cluster_commands
-                + self._commands.get_queue_status_command
-            )
             out = self._execute_command(
-                commands=" ".join(commands),
+                commands=cluster_commands + self._commands.get_queue_status_command,
                 split_output=False,
                 shell=True,
             )
             df = self._commands.convert_queue_status(queue_status_output=out)
-            if not df.empty:
-                df_lst.append(df)
-        if len(df_lst)>0:
-            df = pandas.concat(df_lst,ignore_index=True)
+            df_lst.append(df)
+        df = pandas.concat(df_lst, axis=1, sort=False).reset_index(drop=True)
         if user is None:
             return df
         else:
