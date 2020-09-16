@@ -76,7 +76,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
             str:
         """
 
-        self._commands.enable_reservation_command(str(reservation_id))
+        self._commands.enable_reservation_command(reservation_id=str(reservation_id))
         print('The reservation tag {} has been added to your job submission command. Be sure to use the appropriate cluster for this tag.'.format(reservation_id))
 
 

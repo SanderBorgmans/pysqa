@@ -29,7 +29,7 @@ class GentCommands(SlurmCommands):
             return ["sbatch", "--reservation={}".format(self.reservation_id), "--parsable"]
         return ["sbatch", "--parsable"]
 
-    def enable_reservation_command(self, reservation_id):
+    def enable_reservation_command(self, reservation_id=None):
         self.reservation_id = reservation_id
 
     @property

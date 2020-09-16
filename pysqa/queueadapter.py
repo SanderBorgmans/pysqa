@@ -134,7 +134,7 @@ class QueueAdapter(object):
         Args:
 
         Returns:
-        
+
         """
         # Implement this in subclasses
         raise NotImplementedError()
