@@ -130,14 +130,14 @@ class QueueAdapter(object):
 
     def enable_reservation(self, *args):
         """
+        Set a reservation tag
 
         Args:
-
+            depends on subclass
         Returns:
 
         """
-        # Implement this in subclasses
-        raise NotImplementedError()
+        self._adapter.enable_reservation(*args)
 
     def get_job_from_remote(self, working_directory, delete_remote=False):
         """
