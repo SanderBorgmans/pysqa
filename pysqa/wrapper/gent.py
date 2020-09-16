@@ -19,8 +19,18 @@ __date__ = "Feb 9, 2019"
 
 
 class GentCommands(SlurmCommands):
-    def enable_reservation_command(self, process_id,reservation_id):
-        return ["scontrol", "update", "job", str(process_id), "reservation={}".format(reservation_id)]
+    def __init__(self):
+        super(GentCommands, self).__init__()
+        self.reservation_id = None
+
+    @property
+    def submit_job_command(self):
+        if self.reservation_id is not None:
+            return ["sbatch", "--reservation={}".format(self.reservation_id), "--parsable"]
+        return ["sbatch", "--parsable"]
+
+    def enable_reservation_command(self, reservation_id):
+        self.reservation_id = reservation_id
 
     @property
     def get_queue_status_command(self):

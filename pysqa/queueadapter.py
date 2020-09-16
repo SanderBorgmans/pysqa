@@ -128,17 +128,16 @@ class QueueAdapter(object):
             command=command,
         )
 
-    def enable_reservation(self, process_id, reservation_id):
+    def enable_reservation(self, *args):
         """
 
         Args:
-            process_id (int):
 
         Returns:
-            str:
+        
         """
-        raise RuntimeWarning('This function adds the reservation tag to the job, but does not bump priority!')
-        return self._adapter.enable_reservation(process_id=process_id,reservation_id=reservation_id)
+        # Implement this in subclasses
+        raise NotImplementedError()
 
     def get_job_from_remote(self, working_directory, delete_remote=False):
         """

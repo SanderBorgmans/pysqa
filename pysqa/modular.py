@@ -68,27 +68,16 @@ class ModularQueueAdapter(BasisQueueAdapter):
         else:
             return None
 
-    def enable_reservation(self, process_id, reservation_id):
+    def enable_reservation(self, reservation_id):
         """
         Args:
             process_id (int):
         Returns:
             str:
         """
-        raise RuntimeWarning('This function adds the reservation tag to the job, but does not bump priority!')
-        cluster_module, cluster_queue_id = self._resolve_queue_id(
-            process_id=process_id, cluster_dict=self._config["cluster"]
-        )
-        cluster_commands = self._switch_cluster_command(cluster_module=cluster_module)
-        commands = (
-            cluster_commands
-            + self._commands.enable_reservation_command(str(cluster_queue_id),str(reservation_id))
-        )
-        out = self._execute_command(commands=" ".join(commands), split_output=True, shell=True)
-        if out is not None:
-            return out[0]
-        else:
-            return None
+
+        self._commands.enable_reservation_command(str(reservation_id))
+        print('The reservation tag {} has been added to your job submission command. Be sure to use the appropriate cluster for this tag.'.format(reservation_id))
 
 
     def delete_job(self, process_id):

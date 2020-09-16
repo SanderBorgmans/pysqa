@@ -153,7 +153,7 @@ class BasisQueueAdapter(object):
         else:
             return None
 
-    def enable_reservation(self, process_id, reservation_id):
+    def enable_reservation(self, process_id):
         """
 
         Args:
@@ -162,19 +162,7 @@ class BasisQueueAdapter(object):
         Returns:
             str:
         """
-        cluster_module, cluster_queue_id = self._resolve_queue_id(
-            process_id=process_id, cluster_dict=self._config["cluster"]
-        )
-        cluster_commands = self._switch_cluster_command(cluster_module=cluster_module)
-        commands = (
-            cluster_commands
-            + self._commands.enable_reservation_command(str(cluster_queue_id),str(reservation_id))
-        )
-        out = self._execute_command(commands=" ".join(commands), split_output=True, shell=True)
-        if out is not None:
-            return out[0]
-        else:
-            return None
+        return self._adapter.enable_reservation(process_id=process_id)
 
     def delete_job(self, process_id):
         """
