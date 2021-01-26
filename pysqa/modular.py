@@ -41,7 +41,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
         """
         if " " in working_directory:
             raise ValueError("Whitespaces in the working_directory name are not supported!")
-            
+
         working_directory, queue_script_path = self._write_queue_script(
             queue=queue,
             job_name=job_name,
@@ -81,7 +81,7 @@ class ModularQueueAdapter(BasisQueueAdapter):
         """
 
         self._commands.enable_reservation_command(reservation_id=str(reservation_id))
-        print('The reservation tag {} has been added to your job submission command)'.format(reservation_id))
+        print('The reservation tag {} has been added to your job submission command'.format(reservation_id))
         print('Be sure to use the appropriate cluster for this tag. This will throw a TypeError during runtime if the reservation tag is not valid.')
 
 
