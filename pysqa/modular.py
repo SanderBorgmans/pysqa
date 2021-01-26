@@ -79,10 +79,13 @@ class ModularQueueAdapter(BasisQueueAdapter):
         Returns:
             str:
         """
-
-        self._commands.enable_reservation_command(reservation_id=str(reservation_id))
-        print('The reservation tag {} has been added to your job submission command'.format(reservation_id))
-        print('Be sure to use the appropriate cluster for this tag. This will throw a TypeError during runtime if the reservation tag is not valid.')
+        if reservation_id is None or reservation_id=="":
+            self._commands.enable_reservation_command()
+            print('The reservation tag has been disabled.')
+        else:
+            self._commands.enable_reservation_command(reservation_id=str(reservation_id))
+            print('The reservation tag {} has been added to your job submission command.'.format(reservation_id))
+            print('Be sure to use the appropriate cluster for this tag. This will throw a Warning and a TypeError during runtime if the reservation tag is not valid.')
 
 
     def delete_job(self, process_id):
