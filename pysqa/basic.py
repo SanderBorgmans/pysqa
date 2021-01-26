@@ -9,6 +9,7 @@ import subprocess
 import re
 import pandas
 from pysqa.queues import Queues
+import warnings
 
 
 class BasisQueueAdapter(object):
@@ -404,7 +405,8 @@ class BasisQueueAdapter(object):
                 universal_newlines=True,
                 shell=not isinstance(commands, list),
             )
-        except subprocess.CalledProcessError:
+        except subprocess.CalledProcessError as e:
+            warnings.warn("The command execution failed with the following message:\n" + e.stdout)
             out = None
         if out is not None and split_output:
             return out.split("\n")
