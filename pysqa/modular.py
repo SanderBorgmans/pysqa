@@ -39,6 +39,9 @@ class ModularQueueAdapter(BasisQueueAdapter):
         Returns:
             int:
         """
+        if " " in working_directory:
+            raise ValueError("Whitespaces in the working_directory name are not supported!")
+            
         working_directory, queue_script_path = self._write_queue_script(
             queue=queue,
             job_name=job_name,
