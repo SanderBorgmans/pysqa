@@ -292,6 +292,7 @@ class BasisQueueAdapter(object):
         job_name=None,
         working_directory=None,
         cores=None,
+        gpus=None,
         memory_max=None,
         run_time_max=None,
         command=None,
@@ -303,6 +304,7 @@ class BasisQueueAdapter(object):
             job_name (str/None):
             working_directory (str/None):
             cores (int/None):
+            gpus (int/None):
             memory_max (int/None):
             run_time_max (int/None):
             command (str/None):
@@ -317,6 +319,7 @@ class BasisQueueAdapter(object):
             job_name=job_name,
             working_directory=working_directory,
             cores=cores,
+            gpus=gpus,
             memory_max=memory_max,
             run_time_max=run_time_max,
             command=command,
@@ -332,6 +335,7 @@ class BasisQueueAdapter(object):
         job_name="job.py",
         working_directory=".",
         cores=None,
+        gpus=None,
         memory_max=None,
         run_time_max=None,
         command=None,
@@ -368,6 +372,7 @@ class BasisQueueAdapter(object):
             job_name=job_name,
             working_directory=working_directory,
             cores=cores,
+            gpus=gpus,
             memory_max=memory_max,
             run_time_max=run_time_max,
             command=command,
