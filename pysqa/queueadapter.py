@@ -101,6 +101,7 @@ class QueueAdapter(object):
         working_directory=None,
         cores=None,
         gpus=None,
+        account_id=None,
         memory_max=None,
         run_time_max=None,
         command=None,
@@ -113,6 +114,7 @@ class QueueAdapter(object):
             working_directory (str/None):
             cores (int/None):
             gpus (int/None):
+            account_id (str/None):
             memory_max (int/None):
             run_time_max (int/None):
             command (str/None):
@@ -126,6 +128,7 @@ class QueueAdapter(object):
             working_directory=working_directory,
             cores=cores,
             gpus=gpus,
+            account_id=account_id,
             memory_max=memory_max,
             run_time_max=run_time_max,
             command=command,
