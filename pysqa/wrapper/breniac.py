@@ -3,7 +3,7 @@
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
 import pandas
-from pysqa.wrapper.slurm import SlurmCommands
+from pysqa.wrapper.torque import TorqueCommands
 
 
 __author__ = "Sander Borgmans"
