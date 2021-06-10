@@ -59,9 +59,9 @@ class BasisQueueAdapter(object):
         elif self._config["queue_type"] == "MOAB":
             class_name = "MoabCommands"
             module_name = "pysqa.wrapper.moab"
-        elif self._config["queue_type"] == "GENT":
-            class_name = "GentCommands"
-            module_name = "pysqa.wrapper.gent"
+        elif self._config["queue_type"] == "BRENIAC":
+            class_name = "BreniacCommands"
+            module_name = "pysqa.wrapper.breniac"
         elif self._config["queue_type"] == "REMOTE":
             class_name = None
             module_name = None
