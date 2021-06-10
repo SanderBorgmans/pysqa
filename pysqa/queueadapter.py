@@ -45,7 +45,7 @@ class QueueAdapter(object):
     """
     def __init__(self, directory="~/.queues"):
         config = self._read_config(file_name=os.path.join(directory, "queue.yaml"))
-        if config["queue_type"] in ["SGE", "TORQUE", "SLURM", "LSF", "MOAB"]:
+        if config["queue_type"] in ["SGE", "TORQUE", "SLURM", "LSF", "MOAB", "BRENIAC"]:
             self._adapter = BasisQueueAdapter(config=config, directory=directory)
         elif config["queue_type"] in ["GENT"]:
             self._adapter = ModularQueueAdapter(config=config, directory=directory)
