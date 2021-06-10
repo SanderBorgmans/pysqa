@@ -26,7 +26,7 @@ class TestRunmode(unittest.TestCase):
         cls.lsf = QueueAdapter(directory=os.path.join(cls.path, "config/lsf"))
         cls.sge = QueueAdapter(directory=os.path.join(cls.path, "config/sge"))
         cls.moab = QueueAdapter(directory=os.path.join(cls.path, "config/moab"))
-        cls.gent = QueueAdapter(directory=os.path.join(cls.path, "config/gent"))
+        cls.breniac = QueueAdapter(directory=os.path.join(cls.path, "config/breniac"))
 
     def test_missing_config(self):
         self.assertRaises(
@@ -44,7 +44,7 @@ class TestRunmode(unittest.TestCase):
         self.assertEqual(self.lsf.config["queue_primary"], "lsf")
         self.assertEqual(self.sge.config["queue_primary"], "impi_hydra_small")
         self.assertEqual(self.moab.config["queue_primary"], "moab")
-        self.assertEqual(self.gent.config["queue_primary"], "slurm")
+        self.assertEqual(self.breniac.config["queue_primary"], "torque")
 
     def test_value_in_range(self):
         self.assertEqual(
@@ -147,8 +147,8 @@ class TestRunmode(unittest.TestCase):
             self.moab._adapter._commands.get_queue_status_command, ["mdiag", "-x"]
         )
         self.assertEqual(
-            self.gent._adapter._commands.get_queue_status_command,
-            ["squeue", "--format", "'%A|%u|%t|%j'", "--noheader"],
+            self.breniac._adapter._commands.get_queue_status_command,
+            ["qstat"],
         )
 
     def test_convert_queue_status(self):
