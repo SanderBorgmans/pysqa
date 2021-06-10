@@ -19,12 +19,22 @@ __date__ = "Feb 9, 2019"
 
 
 class GentCommands(SlurmCommands):
-    def enable_reservation_command(self, process_id,reservation_id):
-        return ["scontrol", "update", "job", str(process_id), "reservation={}".format(reservation_id)]
+    def __init__(self):
+        super(GentCommands, self).__init__()
+        self.reservation_id = None
+
+    @property
+    def submit_job_command(self):
+        if self.reservation_id is not None:
+            return ["sbatch", "--reservation={}".format(self.reservation_id), "--parsable"]
+        return ["sbatch", "--parsable"]
+
+    def enable_reservation_command(self, reservation_id=None):
+        self.reservation_id = reservation_id
 
     @property
     def get_queue_status_command(self):
-        return ["squeue", "--format", "'%A|%u|%t|%j'", "--noheader"]
+        return ["squeue", "--format", "'%A|%u|%t|%j'"]
 
     @staticmethod
     def get_job_id_from_output(queue_submit_output):
@@ -33,12 +43,22 @@ class GentCommands(SlurmCommands):
     @staticmethod
     def convert_queue_status(queue_status_output):
         qstat = queue_status_output.splitlines()
-        queue = qstat[0].split(':')[1].strip()
-        if len(qstat) <= 1: # first row contains cluster name, check if there are jobs
+        if 'doduo' in qstat[1]:
+            queue='doduo'
+            qstat=qstat[9:]
+        else:
+            queue = qstat[0].split(':')[1].strip()
+        # first row contains cluster name, check if there are jobs, second row contains column names
+        if len(qstat) <= 2:
             return pandas.DataFrame(columns=['cluster','jobid','user','jobname','status'])
-        line_split_lst = [line.split('|') for line in qstat[1:]]
-        job_id_lst, user_lst, status_lst, job_name_lst, queue_lst = zip(*[(int(jobid), user, status.lower(), jobname, queue)
-                                                               for jobid, user, status, jobname in line_split_lst])
+        line_split_lst = [line.split('|') for line in qstat[2:]]
+
+        job_id_lst, user_lst, status_lst, job_name_lst, queue_lst = zip(
+            *[
+                (int(jobid), user, status.lower(), jobname, queue)
+                for jobid, user, status, jobname in line_split_lst
+            ]
+        )
         return pandas.DataFrame({'cluster': queue_lst,
                                  'jobid': job_id_lst,
                                  'user': user_lst,
